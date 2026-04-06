@@ -1,0 +1,23 @@
+.nav-link {
+  position: relative;
+  text-decoration: none; 
+}
+
+.nav-link:hover {
+  color: #ffc107 ; 
+  background-color: #000408;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0; /* start hidden */
+  height: 2px;
+  background-color: #ffc107;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%; /* expand on hover */
+}

@@ -1,0 +1,18 @@
+import React from "react";
+
+const NewsIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    fill={"currentColor"}
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    {/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}
+    <path d="M12 7H6v6h6zm-2 4H8V9h2zM13 15H6v2h12v-2h-5M14 11h4v2h-4zM14 7h4v2h-4z"></path>
+    <path d="M4 21h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2M4 5h16v14H4z"></path>
+  </svg>
+);
+
+export default NewsIcon;
