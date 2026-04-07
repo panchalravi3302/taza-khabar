@@ -29,9 +29,7 @@ this.apiKey = process.env.REACT_APP_NEWS_API_KEY;  }
   try {
     this.setState({ loading: true, error: null });
 
-const url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&token=YOUR_ACTUAL_KEY&max=${this.pageSize}`;    const response = await fetch(url);
-
-    // 🔴 check if request failed
+const url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&token=${this.apiKey}&max=${this.pageSize}`;    // 🔴 check if request failed
     if (!response.ok) {
       throw new Error("API request failed");
     }
