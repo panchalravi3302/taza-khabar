@@ -29,14 +29,16 @@ this.apiKey = process.env.REACT_APP_NEWS_API_KEY;  }
   try {
     this.setState({ loading: true, error: null });
 
-const url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&token=${this.apiKey}&max=${this.pageSize}`;    // 🔴 check if request failed
+    const url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&token=${this.apiKey}&max=${this.pageSize}`;
+
+    const response = await fetch(url); // ✅ YOU MISSED THIS
+
     if (!response.ok) {
       throw new Error("API request failed");
     }
 
     const data = await response.json();
 
-    // 🔴 safe fallback
     const articles = data.articles || [];
 
     this.setState((prevState) => ({
@@ -54,7 +56,8 @@ const url = `https://gnews.io/api/v4/top-headlines?category=${this.props.categor
     this.setState({
       articles: [],
       loading: false,
-error: "Failed to load news. Check your API key.",    });
+      error: "Failed to load news. Check your API key.",
+    });
   }
 }
 
