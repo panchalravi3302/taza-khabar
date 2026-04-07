@@ -1,8 +1,8 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
-import NewsItem from "./newsitem";
+import { Component } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import "./News.css";
+import NewsItem from "./newsitem";
 
 export class News extends Component {
   static defaultProps = {
@@ -23,34 +23,42 @@ export class News extends Component {
       error: null,
     };
     this.pageSize = 12;
-    this.apiKey = "cb7a3f08f2254249a5c6a90ead9e47b3";
-  }
+this.apiKey = process.env.REACT_APP_NEWS_API_KEY;  }
 
-  async fetchNews(pageNumber) {
-    try {
-      this.setState({ loading: true, error: null });
-      const url = `https://newsapi.org/v2/top-headlines?category=${this.props.category}&apiKey=${this.apiKey}&page=${pageNumber}&pageSize=${this.pageSize}`;
-      const response = await fetch(url);
-      const data = await response.json();
+ async fetchNews(pageNumber) {
+  try {
+    this.setState({ loading: true, error: null });
 
-      this.setState((prevState) => ({
-        articles:
-          pageNumber === 1
-            ? data.articles
-            : [...prevState.articles, ...data.articles],
-        totalResults: data.totalResults || 0,
-        page: pageNumber,
-        loading: false,
-      }));
-    } catch (error) {
-      console.error("Error fetching news:", error);
-      this.setState({
-        articles: [],
-        loading: false,
-        error: "Failed to load news.",
-      });
+const url = `https://gnews.io/api/v4/top-headlines?category=${this.props.category}&lang=en&token=YOUR_ACTUAL_KEY&max=${this.pageSize}`;    const response = await fetch(url);
+
+    // 🔴 check if request failed
+    if (!response.ok) {
+      throw new Error("API request failed");
     }
+
+    const data = await response.json();
+
+    // 🔴 safe fallback
+    const articles = data.articles || [];
+
+    this.setState((prevState) => ({
+      articles:
+        pageNumber === 1
+          ? articles
+          : [...prevState.articles, ...articles],
+      totalResults: data.totalResults || 0,
+      page: pageNumber,
+      loading: false,
+    }));
+  } catch (error) {
+    console.error("Error fetching news:", error);
+
+    this.setState({
+      articles: [],
+      loading: false,
+error: "Failed to load news. Check your API key.",    });
   }
+}
 
   componentDidMount() {
     this.fetchNews(1);
@@ -74,10 +82,9 @@ export class News extends Component {
           <p className="text-danger">{this.state.error}</p>
         ) : (
           <InfiniteScroll
-            dataLength={this.state.articles.length}
+            dataLength={this.state.articles?.length || 0}
             next={this.fetchMoreData}
-            hasMore={this.state.articles.length < this.state.totalResults}
-            loader={
+hasMore={(this.state.articles?.length || 0) < this.state.totalResults}            loader={
               <div className="d-flex justify-content-center my-3">
                 <div className="spinner-border" role="status">
                   <span className="visually-hidden">Loading...</span>
@@ -94,14 +101,14 @@ export class News extends Component {
               <div className="news-grid">
                 {this.state.articles.map((element) => (
                   <NewsItem
-                    key={element.url}
-                    title={element?.title || "No title"}
-                    description={element?.description || "No description"}
-                    imageurl={element?.urlToImage}
-                    newsurl={element?.url}
-                    author={element?.author}
-                    publishedAt={element?.publishedAt}
-                  />
+  key={element.url}
+  title={element?.title || "No title"}
+  description={element?.description || "No description"}
+  imageurl={element?.image}
+  newsurl={element?.url}
+  author={element?.source?.name}
+  publishedAt={element?.publishedAt}
+/>
                 ))}
               </div>
             </div>
