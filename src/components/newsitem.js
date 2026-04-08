@@ -2,44 +2,49 @@ import { Component } from "react";
 
 export class NewsItem extends Component {
   render() {
-    let { title, description, imageurl, newsurl, author, publishedAt } =
-      this.props;
+    let {
+      title,
+      description,
+      imageurl,
+      newsurl,
+      author,
+      publishedAt,
+      category,
+    } = this.props;
+    const timeAgo = new Date(publishedAt).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
     return (
-      <div className="news-container">
-        <div className="my-3">
-          <div className="card">
-            <img
-              className="card-img-top"
-              src={
-                imageurl
-                  ? imageurl
-                  : "https://media.zenfs.com/en/coingape_360/9666ffd53aebba899efea6ee3770e282"
-              }
-              alt={title}
-            />{" "}
-            <div className="card-body">
-              <h5 className="card-title">{title}</h5>
-              <p className="card-text">{description}</p>
-              <p className="card-text">
-                <small className="text-muted">
-                  By {author ? author : "Unknown"}
-                </small>
-              </p>
-              <p className="card-text">
-                <small className="text-muted">
-                  Published at {new Date(publishedAt).toGMTString()}
-                </small>
-              </p>
-              <a
-                href={newsurl}
-                target="_blank"
-                rel="noreferrer"
-                className="btn btn-primary"
-              >
-                Read more
-              </a>
-            </div>
+      <div className="news-card">
+        {imageurl ? (
+          <img
+            src={imageurl}
+            alt={title}
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+          />
+        ) : (
+          <div className="news-card-fallback">📰</div>
+        )}
+        <div className="news-card-body">
+          <div className="news-card-category">{category || "General"}</div>
+          <h5 className="news-card-title">{title}</h5>
+          <p className="news-card-desc">{description}</p>
+          <div className="news-card-meta">
+            <span>By {author || "Unknown"}</span>
+            <span>{timeAgo}</span>
           </div>
+          <a
+            href={newsurl}
+            target="_blank"
+            rel="noreferrer"
+            className="news-card-btn"
+          >
+            Read more →
+          </a>
         </div>
       </div>
     );
